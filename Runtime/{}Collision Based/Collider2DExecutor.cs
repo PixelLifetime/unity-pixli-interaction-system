@@ -11,6 +11,10 @@ using UnityEditor;
 
 namespace PixLi
 {
+	/// <summary>
+	/// Gets each first object colliding with this collider based on layer mask.
+	/// Better approach would be to loop each distinct layer mask but I guess by design you would actually use distinct layer masks instead of having events with same layers selected in layer masks.
+	/// </summary>
 	public class Collider2DExecutor : MonoBehaviour
 	{
 		[SerializeField] private Collider2D _collider;
@@ -18,18 +22,19 @@ namespace PixLi
 
 		public void OverlapCollider()
 		{
-			for (int i = 0; i < this._onOverlapColliderData.Length; i++)
+			for (int a = 0; a < this._onOverlapColliderData.Length; a++)
 			{
-				ContactFilter2D contactFilter2D = new ContactFilter2D();
-
-				contactFilter2D.useLayerMask = true;
-				contactFilter2D.SetLayerMask(this._onOverlapColliderData[i]._LayerMask);
+				ContactFilter2D contactFilter2D = new ContactFilter2D
+				{
+					useLayerMask = true
+				};
+				contactFilter2D.SetLayerMask(this._onOverlapColliderData[a]._LayerMask);
 
 				Collider2D[] collider2Ds = new Collider2D[1];
 
 				this._collider.OverlapCollider(contactFilter2D, collider2Ds);
 
-				this._onOverlapColliderData[i]._Event.Invoke(collider2Ds[i]);
+				this._onOverlapColliderData[a]._Event.Invoke(collider2Ds[0]);
 			}
 		}
 

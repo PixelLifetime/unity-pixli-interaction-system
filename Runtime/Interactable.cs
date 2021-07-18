@@ -14,17 +14,23 @@ namespace PixLi
 	public class Interactable : MonoBehaviour, IInteractable
 	{
 		[SerializeField] private Transform _interactionPoint;
-		public Transform _InteractionPoint { get { return this._interactionPoint; } }
+		public Transform _InteractionPoint => this._interactionPoint;
 
 		[Header("Interactable Events")]
 
 		[Tooltip("Called every time there is any interaction with this Interactable.")]
 		[SerializeField] private UnityEvent _onInteract;
-		public UnityEvent _OnInteract { get { return this._onInteract; } }
+		public UnityEvent _OnInteract => this._onInteract;
+
+		[SerializeField] private float _delay = 2.0f;
+		public float _Delay => this._delay;
+
+		[SerializeField] private UnityEvent _onInteractDelayed;
+		public UnityEvent _OnInteractDelayed => this._onInteractDelayed;
 
 		[Tooltip("Called when no reaction was present when there is interaction with this Interactable.")]
 		[SerializeField] private UnityEvent _onInteractionFail;
-		public UnityEvent _OnInteractionFail { get { return this._onInteractionFail; } }
+		public UnityEvent _OnInteractionFail => this._onInteractionFail;
 
 		[Header("Conditional Reaction Events")]
 
@@ -35,6 +41,8 @@ namespace PixLi
 		{
 			this._onInteract.Invoke();
 
+			this.StartCoroutine(CoroutineProcessorsCollection.InvokeAfter(this._delay, () => this._onInteractDelayed.Invoke()));
+
 			for (int i = 0; i < this._conditionalEvents.Length; i++)
 			{
 				if (this._conditionalEvents[i].Invoke())
@@ -42,6 +50,11 @@ namespace PixLi
 			}
 
 			this._onInteractionFail.Invoke();
+		}
+
+		private void Start()
+		{
+			InteractionsManager._Instance.Register(this);
 		}
 
 #if UNITY_EDITOR

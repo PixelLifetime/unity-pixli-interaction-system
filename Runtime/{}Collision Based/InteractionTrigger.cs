@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEditor.Events;
 
 #if UNITY_EDITOR
 using UnityEditor;
+using UnityEditor.Events;
 #endif
 
 namespace PixLi

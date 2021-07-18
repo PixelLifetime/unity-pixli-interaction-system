@@ -4,16 +4,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
+using System;
 
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
+
+using Object = UnityEngine.Object;
 
 namespace PixLi
 {
 	public interface IInteractable
 	{
 		void Interact();
+
+		UnityEvent _OnInteract { get; }
 
 #if UNITY_EDITOR
 #endif
