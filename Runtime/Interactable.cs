@@ -22,11 +22,8 @@ namespace PixLi
 		[SerializeField] private UnityEvent _onInteract;
 		public UnityEvent _OnInteract => this._onInteract;
 
-		[SerializeField] private float _delay = 2.0f;
-		public float _Delay => this._delay;
-
-		[SerializeField] private UnityEvent _onInteractDelayed;
-		public UnityEvent _OnInteractDelayed => this._onInteractDelayed;
+		[SerializeField] private DelayedEvent[] _onInteractDelayedEvents;
+		public DelayedEvent[] _OnInteractDelayedEvents => this._onInteractDelayedEvents;
 
 		[Tooltip("Called when no reaction was present when there is interaction with this Interactable.")]
 		[SerializeField] private UnityEvent _onInteractionFail;
@@ -37,16 +34,34 @@ namespace PixLi
 		[Tooltip("Reactions are called based on satisfaction of conditions.")]
 		[SerializeField] private ConditionalEvent[] _conditionalEvents;
 
+		[SerializeField] private bool _invokeAllConditionals = true;
+		public bool _InvokeAllConditionals => this._invokeAllConditionals;
+
 		public void Interact()
 		{
 			this._onInteract.Invoke();
 
-			this.StartCoroutine(CoroutineProcessorsCollection.InvokeAfter(this._delay, () => this._onInteractDelayed.Invoke()));
+			for (int a = 0; a < this._onInteractDelayedEvents.Length; a++)
+			{
+				this.StartCoroutine(
+					routine: CoroutineProcessorsCollection.InvokeAfter(
+						seconds: this._onInteractDelayedEvents[a]._Delay,
+						action: this._onInteractDelayedEvents[a]._Event.Invoke
+					)
+				);
+			}
 
 			for (int i = 0; i < this._conditionalEvents.Length; i++)
 			{
-				if (this._conditionalEvents[i].Invoke())
-					return;
+				if (this._invokeAllConditionals)
+				{
+					this._conditionalEvents[i].Invoke();
+				}
+				else
+				{
+					if (this._conditionalEvents[i].Invoke())
+						return;
+				}
 			}
 
 			this._onInteractionFail.Invoke();
@@ -105,5 +120,15 @@ namespace PixLi
 
 			return false;
 		}
+	}
+
+	[System.Serializable]
+	public struct DelayedEvent
+	{
+		[SerializeField] private float _delay;
+		public float _Delay => this._delay;
+
+		[SerializeField] private UnityEvent _event;
+		public UnityEvent _Event => this._event;
 	}
 }
