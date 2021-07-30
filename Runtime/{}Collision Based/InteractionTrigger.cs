@@ -86,7 +86,10 @@ namespace PixLi
 
 		private bool _triedToFindDefaultCollider;
 
-		protected virtual void OnDrawGizmos()
+		[SerializeField] private bool _drawGizmosOnlyWhenSelected = true;
+		public bool _DrawGizmosOnlyWhenSelected => this._drawGizmosOnlyWhenSelected;
+
+		private void DrawGizmos()
 		{
 			if (!this._triedToFindDefaultCollider)
 			{
@@ -107,6 +110,18 @@ namespace PixLi
 			{
 				GizmosUtility.DrawCombinedCube(this.transform.position, this._gizmoSize + Vector3.one * GIZMO_SIZE_BIAS, Color.cyan, this.transform, 0.2f);
 			}
+		}
+
+		protected virtual void OnDrawGizmos()
+		{
+			if (!this._drawGizmosOnlyWhenSelected)
+				this.DrawGizmos();
+		}
+
+		protected virtual void OnDrawGizmosSelected()
+		{
+			if (this._drawGizmosOnlyWhenSelected)
+				this.DrawGizmos();
 		}
 
 		private void Reset()

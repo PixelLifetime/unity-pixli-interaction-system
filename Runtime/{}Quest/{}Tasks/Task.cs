@@ -99,9 +99,22 @@ namespace PixLi
 
 #if UNITY_EDITOR
 		public static Task S_GlobalTaskEO;
-		
+
 		[UnityEngine.HideInInspector]
 		[SerializeField] private bool _globalEO;
+
+		[Header("Editor Only")]
+
+		[SerializeField] private bool _eoResetOnEnteringPlayMode = true;
+		public bool _EOResetOnEnteringPlayMode => this._eoResetOnEnteringPlayMode;
+
+		public void OnEnable()
+		{
+			if (this._eoResetOnEnteringPlayMode)
+			{
+				this.ResetState();
+			}
+		}
 #endif
 	}
 
