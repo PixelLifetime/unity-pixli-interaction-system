@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using UnityEngine;
+using UnityEngine.Events;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -12,15 +13,19 @@ using System.IO;
 namespace PixLi
 {
 	[System.Serializable]
-	[CreateAssetMenu(fileName = "[Task] name", menuName = "Task/Task", order = 1)]
+	//[CreateAssetMenu(fileName = "[Task]", menuName = "Task/Task", order = 1)]
 	public class Task : ScriptableObject, ITask
 	{
+		[SerializeField] private IdTag _idTag;
+		public IdTag _IdTag => this._idTag;
+
 		[SerializeField] protected Task[] subTasks = new Task[0];
+		public Task[] _Subtasks => this.subTasks;
 
 		public Task ParentTask { get; set; }
 
 		[SerializeField] protected bool active = true;
-		public bool _Active { get { return this.active; } }
+		public bool _Active => this.active;
 
 		public void Activate()
 		{
@@ -28,7 +33,11 @@ namespace PixLi
 		}
 
 		[SerializeField] protected bool completed;
-		public bool _Completed { get { return this.completed; } }
+		public bool _Completed => this.completed;
+
+		[Expose]
+		[SerializeField] private UnityEventReference _onCompleted;
+		public UnityEventReference _OnCompleted => this._onCompleted;
 
 		public void Complete(bool includeSubTasks = false)
 		{
@@ -41,6 +50,8 @@ namespace PixLi
 			}
 
 			this.completed = true;
+
+			this._onCompleted._UnityEvent.Invoke();
 
 			this.ParentTask?.TryToCompleteDependingOnSubTasks();
 		}
@@ -97,7 +108,40 @@ namespace PixLi
 			this.Initialize();
 		}
 
+
 #if UNITY_EDITOR
+		public static void CreateAsset<TTask>()
+			where TTask : Task
+		{
+			string selectionPath = AssetDatabase.GetAssetPath(assetObject: Selection.activeObject);
+
+			TTask task = ScriptableObjectUtility.CreateAsset<TTask>(
+				path: Directory.Exists(path: selectionPath) ? selectionPath : Path.GetDirectoryName(path: selectionPath),
+				name: "[Task]"
+			);
+
+			task._onCompleted = ScriptableObjectUtility.CreateAssetAsChild<UnityEventReference>(
+				scriptableObject: task,
+				name: "[Unity Event Reference] On Completed"
+			);
+
+			EditorUtility.SetDirty(target: task);
+		}
+
+		[MenuItem(itemName: "Assets/Create/Task/[Task]")]
+		public static void CreateAsset() => Task.CreateAsset<Task>();
+
+		//private void OnValidate()
+		//{
+		//	if (this._OnCompleted == null)
+		//	{
+		//		this._onCompleted = ScriptableObjectUtility.CreateAssetAsChild<UnityEventReference>(
+		//			scriptableObject: this,
+		//			name: "[Unity Event Reference] On Completed"
+		//		);
+		//	}
+		//}
+
 		public static Task S_GlobalTaskEO;
 
 		[UnityEngine.HideInInspector]

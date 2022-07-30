@@ -19,7 +19,7 @@ namespace PixLi
 		[SerializeField] private bool _shouldBeActive = true;
 		[SerializeField] private bool _shouldBeCompleted = true;
 
-		public bool _Satisfied { get { return !(this._task._Active ^ this._shouldBeActive) && !(this._task._Completed ^ this._shouldBeCompleted); } }
+		public bool _Satisfied => !(this._task._Active ^ this._shouldBeActive) && !(this._task._Completed ^ this._shouldBeCompleted);
 
 #if UNITY_EDITOR
 		//protected override void OnDrawGizmos()

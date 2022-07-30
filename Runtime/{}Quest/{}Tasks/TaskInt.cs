@@ -21,7 +21,7 @@ namespace PixLi
 		}
 	}
 
-	[CreateAssetMenu(fileName = "Task Int", menuName = "Task/Task Int", order = 1)]
+	//[CreateAssetMenu(fileName = "Task Int", menuName = "Task/Task Int", order = 1)]
 	public class TaskInt : Task<TaskIntDefaultData, TaskIntCompletionData>
 	{
 		private int _value;
@@ -44,6 +44,9 @@ namespace PixLi
 		}
 
 #if UNITY_EDITOR
+		[MenuItem(itemName: "Assets/Create/Task/[Task Int]")]
+		public new static void CreateAsset() => Task.CreateAsset<TaskInt>();
+
 		//protected override void OnDrawGizmos()
 		//{
 		//}

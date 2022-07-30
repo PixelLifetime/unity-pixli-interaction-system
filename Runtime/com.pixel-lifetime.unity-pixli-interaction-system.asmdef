@@ -1,0 +1,23 @@
+{
+    "name": "com.pixel-lifetime.unity-pixli-interaction-system",
+    "rootNamespace": "",
+    "references": [
+        "GUID:e4cd6b641a02fa442a29bacdc712b8dd",
+        "GUID:9f0890814c274f1439c4497cceeefb0b",
+        "GUID:be2f019c086c01749940b3c79bd14a06",
+        "GUID:5c3eec09827b05749b14a18fe93c0408",
+        "GUID:8fe00bbc73509ce41b79a7eaeeb2ed6f",
+        "GUID:72118e193c76b4745809963808bb45ca",
+        "GUID:696daadd9d7b79348a8af235c4aa6a80",
+        "GUID:75469ad4d38634e559750d17036d5f7c"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
