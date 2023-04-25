@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 9072214797749537661}
   - component: {fileID: 9072214797749537659}
   - component: {fileID: 9072214797749537660}
-  m_Layer: 19
+  m_Layer: 0
   m_Name: "[Interaction Tigger \u2022 Interactable] Player"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -50,10 +50,12 @@ MonoBehaviour:
   _onInteract:
     m_PersistentCalls:
       m_Calls: []
+  _onInteractDelayedEvents: []
   _onInteractionFail:
     m_PersistentCalls:
       m_Calls: []
   _conditionalEvents: []
+  _invokeAllConditionals: 1
 --- !u!114 &9072214797749537661
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -103,6 +105,7 @@ MonoBehaviour:
       m_Groups: 
       m_Action: Input
       m_Flags: 0
+    m_Flags: 0
 --- !u!114 &9072214797749537659
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -134,7 +137,7 @@ MonoBehaviour:
           m_CallState: 2
     _layerMask:
       serializedVersion: 2
-      m_Bits: 16384
+      m_Bits: 256
   _onTriggerStayData: []
   _onTriggerExitData:
   - _event:
@@ -155,8 +158,9 @@ MonoBehaviour:
           m_CallState: 2
     _layerMask:
       serializedVersion: 2
-      m_Bits: 16384
+      m_Bits: 256
   _gizmoSize: {x: 1, y: 1, z: 1}
+  _drawGizmosOnlyWhenSelected: 1
 --- !u!65 &9072214797749537660
 BoxCollider:
   m_ObjectHideFlags: 0
